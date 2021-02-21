@@ -16,8 +16,8 @@ function Start-Client {
             [Parameter(Position=0, Mandatory=$true)][ValidateNotNullOrEmpty()][string]$command,
             [Parameter(Position=2, Mandatory=$true)][ValidateNotNullOrEmpty()][string]$time
         )
-        $b = Invoke-Expression("{powershell.exe -noninteractive -c '"+$command+"' | Out-String}")
-        $j = Start-Job -ScriptBlock $b
+        $b = Invoke-Expression("{powershell.exe -noninteractive -c '"+$command+" 2>&1' | Out-String}")
+        $j = Start-Job -ScriptBlock $b 
         Wait-Job -Job $j -Timeout $time | Out-Null
         $msg = ""
         if ($j.JobStateInfo.State -ne "Completed") {$msg = "Process Has exceeded Timeout Limit and was forcefully stopped. Output as follows:"}
